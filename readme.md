@@ -11,34 +11,34 @@
 
 <div align="center">
 <a 
-    href="https://github.com/parro-it/fileargs/blob/0764588ea9629ba0bdf8e5786f6371208b95067a/go.mod#L3" style="display: inline">
+    href="https://github.com/parro-it/templare/blob/0764588ea9629ba0bdf8e5786f6371208b95067a/go.mod#L3" style="display: inline">
     <img 
         alt="Go Version" 
-        src="https://img.shields.io/github/go-mod/go-version/parro-it/fileargs?style=flat&logo=go">
+        src="https://img.shields.io/github/go-mod/go-version/parro-it/templare?style=flat&logo=go">
 </a>
 <a 
-    href="https://github.com/parro-it/fileargs/actions/workflows/go.yml" 
+    href="https://github.com/parro-it/templare/actions/workflows/go.yml" 
     style="display: inline"> 
     <img 
         alt="Tests Status" 
-        src="https://img.shields.io/github/workflow/status/parro-it/fileargs/Test/master?style=flat&label=Tests&logo=github">
+        src="https://img.shields.io/github/workflow/status/parro-it/templare/Test/master?style=flat&label=Tests&logo=github">
 </a>
 <a 
-    href="https://codeclimate.com/github/parro-it/fileargs/test_coverage"
+    href="https://codeclimate.com/github/parro-it/templare/test_coverage"
     style="display: inline"> 
     <img 
         alt="Coverage" 
-        src="https://img.shields.io/codeclimate/coverage/parro-it/fileargs?style=flat&label=Coverage&logo=code-climate">
+        src="https://img.shields.io/codeclimate/coverage/parro-it/templare?style=flat&label=Coverage&logo=code-climate">
 </a>
 <a 
-    href="https://codeclimate.com/github/parro-it/fileargs" 
+    href="https://codeclimate.com/github/parro-it/templare" 
     style="display: inline"> 
     <img 
         alt="Code Climate" 
-        src="https://img.shields.io/codeclimate/maintainability/parro-it/fileargs?style=flat&label=Code-Climate&logo=code-climate">
+        src="https://img.shields.io/codeclimate/maintainability/parro-it/templare?style=flat&label=Code-Climate&logo=code-climate">
 </a> 
 <a 
-    href="https://pkg.go.dev/github.com/parro-it/fileargs" 
+    href="https://pkg.go.dev/github.com/parro-it/templare" 
     style="display: inline"> 
     <img 
         alt="Docs" 
@@ -51,13 +51,13 @@
 # Documentation
 
 * See [examples](examples_test.go) of use.
-* Read the API docs on [go.dev](https://pkg.go.dev/github.com/parro-it/fileargs).
+* Read the API docs on [go.dev](https://pkg.go.dev/github.com/parro-it/templare).
 
 # Contributing
 
 * Pull request are welcome!
 * Open an issue if you find a bug.
-* If you want to request a new feature or need help, starts a [new discussion](https://github.com/parro-it/fileargs/discussions/new).
+* If you want to request a new feature or need help, starts a [new discussion](https://github.com/parro-it/templare/discussions/new).
 * Read [contribution guidelines](contributing.md).
 
 # License
