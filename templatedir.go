@@ -19,6 +19,7 @@ import (
 	"github.com/parro-it/vs/writefs"
 )
 
+// RenderTo ...
 func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 
 	destfs := syncfs.New(destfsys).(writefs.WriteFS)
@@ -56,6 +57,7 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 	return err
 }
 
+// RenderToSelf ...
 func RenderToSelf(fsys writefs.WriteFS) error {
 	return nil
 }
