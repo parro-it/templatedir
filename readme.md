@@ -1,11 +1,10 @@
 # Templare
-
 <div align="center">
 <img 
+    width="50%"
     alt="logo" 
     src="media/logo.svg">
 </div>
-
 
 > Templare aid you in making repos from tempalte 
 
