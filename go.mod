@@ -7,4 +7,4 @@ require (
 	github.com/stretchr/testify v1.7.0
 )
 
-replace github.com/parro-it/vs => ../../parro-it/vs
+// replace github.com/parro-it/vs => ../../parro-it/vs
