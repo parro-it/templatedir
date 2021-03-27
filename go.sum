@@ -2,8 +2,8 @@ github.com/davecgh/go-spew v1.1.0 h1:ZDRjVQ15GmhC3fiQ8ni8+OwkZQO4DARzQgrnXU1Liz8
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
 github.com/kr/fs v0.1.0/go.mod h1:FFnZGqtBN9Gxj7eW1uZ42v5BccTP0vu6NEaFoC2HwRg=
 github.com/mikkeloscar/sshconfig v0.1.0/go.mod h1:sXGmxNErJ2lnR/mc9bkRlxyyEg+La0vH6hz5KQ2uySw=
-github.com/parro-it/vs v0.0.0-20210311192506-52c47d608589 h1:jXBwq7pWA5DKntwQTIEfCYqFH4qii7948Sb1J4KJXqU=
-github.com/parro-it/vs v0.0.0-20210311192506-52c47d608589/go.mod h1:SMFoTivZsjNRKEdMaS8fS7Qb3tevKejsf0oVYPsm6B8=
+github.com/parro-it/vs v0.0.1 h1:eEVw98LuOjZIilFExwog7oWohK3A7MeJEEzXXzR1zbM=
+github.com/parro-it/vs v0.0.1/go.mod h1:SMFoTivZsjNRKEdMaS8fS7Qb3tevKejsf0oVYPsm6B8=
 github.com/pkg/errors v0.9.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pkg/sftp v1.12.0/go.mod h1:fUqqXB5vEgVCZ131L+9say31RAri6aF6KDViawhxKK8=
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
