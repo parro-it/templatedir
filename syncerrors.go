@@ -1,7 +1,9 @@
 package templatedir
 
+// SyncErrors ...
 type SyncErrors chan error
 
+// Failed...
 func (errs SyncErrors) Failed() bool {
 	select {
 	case err := <-errs:
@@ -16,6 +18,7 @@ func (errs SyncErrors) Failed() bool {
 	}
 }
 
+// Close...
 func (errs SyncErrors) Close() error {
 	var err error
 	select {
@@ -27,6 +30,7 @@ func (errs SyncErrors) Close() error {
 	return err
 }
 
+// SetFailedOnErr...
 func (errs SyncErrors) SetFailedOnErr(err error) bool {
 	if err != nil {
 		select {
