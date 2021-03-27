@@ -1,13 +1,12 @@
 # Templare
 
+> Templare aids you in making GH repos from repo template 
+
 <div align="center">
 <img 
     alt="logo" 
     src="media/logo.svg">
 </div>
-
-
-> Templare aid you in making repos from tempalte 
 
 <div align="center">
 <a 
