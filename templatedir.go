@@ -15,37 +15,28 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/parro-it/vs/syncfs"
 	"github.com/parro-it/vs/writefs"
 )
 
-func RenderTo(srcfs fs.FS, destfs writefs.WriteFS) error {
+func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
+
+	destfs := syncfs.New(destfsys).(writefs.WriteFS)
+
 	res, walkErrs := walkDir(srcfs)
 	allFilesDone := sync.WaitGroup{}
 	allFilesDone.Add(runtime.NumCPU())
-	errs := make(chan error)
+	errs := make(SyncErrors)
 	for i := 0; i < runtime.NumCPU(); i++ {
 		go func() {
 			defer allFilesDone.Done()
 			for src := range res {
 				fmt.Println("src --> ", src)
-				select {
-				case err := <-errs:
-					select {
-					case errs <- err:
-						fmt.Println("goroutines failed: exit.", src)
-					default:
-					}
+				if errs.Failed() {
 					return
-				default:
 				}
 
-				err := renderFile(srcfs, destfs, src)
-				if err != nil {
-					fmt.Println("ERR", err.Error())
-					select {
-					case errs <- err:
-					default:
-					}
+				if errs.SetFailedOnErr(renderFile(srcfs, destfs, src)) {
 					return
 				}
 			}
