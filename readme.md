@@ -1,6 +1,6 @@
 # Templare
 
-> Templare aid you in making repos from tempalte 
+> Templare aids you to create GH repos from GH template repos.
 
 <div align="center">
 <img 
