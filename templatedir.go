@@ -5,6 +5,7 @@
 package templatedir
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -60,6 +61,15 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS, args interface{}) error {
 
 // Args ...
 type Args map[string]interface{}
+
+func (a Args) String() string {
+	buf, err := json.MarshalIndent(a, "", "  ")
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error in Args::String: %s\n", err.Error())
+		return ""
+	}
+	return string(buf)
+}
 
 // Author is {{.Author}}
 // This repository is named {{.RepoName}}
