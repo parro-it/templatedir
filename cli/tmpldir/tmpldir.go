@@ -35,6 +35,6 @@ func main() {
 
 	fmt.Println("->	applying to directory ", targetDir)
 	fsys := osfs.DirWriteFS(targetDir)
-	check.err = templatedir.RenderTo(fsys, fsys)
+	check.err = templatedir.RenderTo(fsys, fsys, templatedir.DefaultArgs())
 	check.dieOnErr()
 }

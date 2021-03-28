@@ -1,0 +1,3 @@
+Author is {{.Author}}
+This repository is named {{.RepoName}}
+Local root of repository is {{.Root}}

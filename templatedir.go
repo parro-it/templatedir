@@ -20,7 +20,7 @@ import (
 )
 
 // RenderTo ...
-func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
+func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS, args interface{}) error {
 
 	destfs := syncfs.New(destfsys).(writefs.WriteFS)
 
@@ -28,6 +28,11 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 	allFilesDone := sync.WaitGroup{}
 	allFilesDone.Add(runtime.NumCPU())
 	errs := make(SyncErrors, 1)
+	r := renderer{
+		srcfs:  srcfs,
+		destfs: destfs,
+		args:   args,
+	}
 	for i := 0; i < runtime.NumCPU(); i++ {
 		go func() {
 			defer allFilesDone.Done()
@@ -37,7 +42,7 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 					return
 				}
 
-				if errs.SetFailedOnErr(renderFile(srcfs, destfs, src)) {
+				if errs.SetFailedOnErr(r.renderFile(src)) {
 					return
 				}
 			}
@@ -53,9 +58,33 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 	return err
 }
 
-// RenderToSelf ...
-func RenderToSelf(fsys writefs.WriteFS) error {
-	return nil
+// Args ...
+type Args map[string]interface{}
+
+// Author is {{.Author}}
+// This repository is named {{.RepoName}}
+// Local root of repository is {{.Root}}
+
+// DefaultArgs ...
+func DefaultArgs() Args {
+
+	args := Args{}
+	for _, arg := range os.Environ() {
+		parts := strings.SplitN(arg, "=", 2)
+		argName := parts[0]
+		argValue := parts[1]
+		args[argName] = argValue
+	}
+
+	ghrepo := os.Getenv("GITHUB_REPOSITORY")
+	parts := strings.SplitN(ghrepo, "/", 2)
+	author := parts[0]
+	repoName := parts[1]
+	args["Author"] = author
+	args["RepoName"] = repoName
+	args["Root"] = os.Getenv("GITHUB_WORKSPACE")
+
+	return args
 }
 
 func walkDir(fsys fs.FS) (chan string, chan error) {
@@ -101,30 +130,34 @@ func mkDirRec(fsys fs.FS, dir string) error {
 	return nil
 }
 
-func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
-	tmpl, err := template.ParseFS(srcfs, src)
+type renderer struct {
+	srcfs  fs.FS
+	destfs writefs.WriteFS
+	args   interface{}
+}
+
+func (r renderer) renderFile(src string) error {
+	tmpl, err := template.ParseFS(r.srcfs, src)
 	if err != nil {
 		return err
 	}
 
-	err = mkDirRec(destfs, path.Dir(src))
+	err = mkDirRec(r.destfs, path.Dir(src))
 	if err != nil && !errors.Is(err, fs.ErrExist) {
 		return err
 	}
 
-	err = writefs.Remove(destfs, src)
+	err = writefs.Remove(r.destfs, src)
 	if err != nil && !errors.Is(err, fs.ErrNotExist) {
 		return err
 	}
 
 	outname := src[:len(src)-len(".template")]
-	dest, err := writefs.OpenFile(destfs, outname, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, fs.FileMode(0644))
+	dest, err := writefs.OpenFile(r.destfs, outname, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, fs.FileMode(0644))
 	if err != nil {
 		return err
 	}
 	defer dest.Close()
 
-	return tmpl.Execute(dest, map[string]int{
-		"Count": 42,
-	})
+	return tmpl.Execute(dest, r.args)
 }
