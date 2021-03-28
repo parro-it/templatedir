@@ -3,7 +3,7 @@ module github.com/parro-it/templatedir
 go 1.16
 
 require (
-	github.com/parro-it/vs v0.0.3
+	github.com/parro-it/vs v0.0.4
 	github.com/stretchr/testify v1.7.0
 )
 

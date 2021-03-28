@@ -25,7 +25,6 @@ func main() {
 
 	var targetDir string
 	var check errorChecker
-	fmt.Println(os.Args, len(os.Args))
 
 	if len(os.Args) > 1 {
 		targetDir = os.Args[1]

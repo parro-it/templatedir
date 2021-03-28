@@ -85,7 +85,6 @@ func mkDirRec(fsys fs.FS, dir string) error {
 	}
 
 	var pathAccum string
-	fmt.Println("destdir", destdir)
 
 	for _, seg := range destdir {
 		if pathAccum != "" {
@@ -97,7 +96,6 @@ func mkDirRec(fsys fs.FS, dir string) error {
 		if err != nil && !errors.Is(err, fs.ErrExist) {
 			return err
 		}
-		fmt.Println("created dir", pathAccum)
 	}
 
 	return nil
@@ -122,7 +120,6 @@ func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
 	outname := src[:len(src)-len(".template")]
 	dest, err := writefs.OpenFile(destfs, outname, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, fs.FileMode(0644))
 	if err != nil {
-		fmt.Println("open err", err)
 		return err
 	}
 	defer dest.Close()
