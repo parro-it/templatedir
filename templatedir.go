@@ -27,7 +27,7 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 	res, walkErrs := walkDir(srcfs)
 	allFilesDone := sync.WaitGroup{}
 	allFilesDone.Add(runtime.NumCPU())
-	errs := make(SyncErrors)
+	errs := make(SyncErrors, 1)
 	for i := 0; i < runtime.NumCPU(); i++ {
 		go func() {
 			defer allFilesDone.Done()
@@ -48,12 +48,8 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS) error {
 	allFilesDone.Wait()
 
 	if err == nil {
-		select {
-		case err = <-errs:
-		default:
-		}
+		err = errs.Close()
 	}
-	close(errs)
 	return err
 }
 
@@ -82,13 +78,8 @@ func walkDir(fsys fs.FS) (chan string, chan error) {
 	return res, errs
 }
 
-func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
-	tmpl, err := template.ParseFS(srcfs, src)
-	if err != nil {
-		return err
-	}
-
-	destdir := strings.Split(path.Dir(src), "/")
+func mkDirRec(fsys fs.FS, dir string) error {
+	destdir := strings.Split(dir, "/")
 	if len(destdir) == 0 {
 		destdir = []string{"."}
 	}
@@ -102,12 +93,30 @@ func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
 		}
 		pathAccum += seg
 
-		err = writefs.MkDir(destfs, pathAccum, fs.FileMode(0644))
-		if err != nil && !errors.Is(fs.ErrExist, err) {
-
+		err := writefs.MkDir(fsys, pathAccum, fs.FileMode(0644))
+		if err != nil && !errors.Is(err, fs.ErrExist) {
 			return err
 		}
 		fmt.Println("created dir", pathAccum)
+	}
+
+	return nil
+}
+
+func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
+	tmpl, err := template.ParseFS(srcfs, src)
+	if err != nil {
+		return err
+	}
+
+	err = mkDirRec(destfs, path.Dir(src))
+	if err != nil && !errors.Is(err, fs.ErrExist) {
+		return err
+	}
+
+	err = writefs.Remove(destfs, src)
+	if err != nil && !errors.Is(err, fs.ErrNotExist) {
+		return err
 	}
 
 	outname := src[:len(src)-len(".template")]
@@ -117,6 +126,7 @@ func renderFile(srcfs fs.FS, destfs writefs.WriteFS, src string) error {
 		return err
 	}
 	defer dest.Close()
+
 	return tmpl.Execute(dest, map[string]int{
 		"Count": 42,
 	})
