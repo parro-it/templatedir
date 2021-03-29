@@ -96,6 +96,7 @@ func DefaultArgs() Args {
 	args["RepoName"] = repoName
 	args["Root"] = os.Getenv("GITHUB_WORKSPACE")
 
+	fmt.Println(args)
 	return args
 }
 
