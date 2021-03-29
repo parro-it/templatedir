@@ -85,6 +85,8 @@ func DefaultArgs() Args {
 		argValue := parts[1]
 		args[argName] = argValue
 	}
+	// curl -s https://api.github.com/users/parro-it
+	// curl -s https://api.github.com/repos/parro-it/gomod
 
 	ghrepo := os.Getenv("GITHUB_REPOSITORY")
 	parts := strings.SplitN(ghrepo, "/", 2)
