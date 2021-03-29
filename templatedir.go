@@ -5,7 +5,6 @@
 package templatedir
 
 import (
-	"encoding/json"
 	"errors"
 	"fmt"
 	"html/template"
@@ -57,47 +56,6 @@ func RenderTo(srcfs fs.FS, destfsys writefs.WriteFS, args interface{}) error {
 		err = errs.Close()
 	}
 	return err
-}
-
-// Args ...
-type Args map[string]interface{}
-
-func (a Args) String() string {
-	buf, err := json.MarshalIndent(a, "", "  ")
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error in Args::String: %s\n", err.Error())
-		return ""
-	}
-	return string(buf)
-}
-
-// Author is {{.Author}}
-// This repository is named {{.RepoName}}
-// Local root of repository is {{.Root}}
-
-// DefaultArgs ...
-func DefaultArgs() Args {
-
-	args := Args{}
-	for _, arg := range os.Environ() {
-		parts := strings.SplitN(arg, "=", 2)
-		argName := parts[0]
-		argValue := parts[1]
-		args[argName] = argValue
-	}
-	// curl -s https://api.github.com/users/parro-it
-	// curl -s https://api.github.com/repos/parro-it/gomod
-
-	ghrepo := os.Getenv("GITHUB_REPOSITORY")
-	parts := strings.SplitN(ghrepo, "/", 2)
-	author := parts[0]
-	repoName := parts[1]
-	args["Author"] = author
-	args["RepoName"] = repoName
-	args["Root"] = os.Getenv("GITHUB_WORKSPACE")
-
-	fmt.Println(args)
-	return args
 }
 
 func walkDir(fsys fs.FS) (chan string, chan error) {

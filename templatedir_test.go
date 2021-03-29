@@ -101,7 +101,11 @@ func TestVars(t *testing.T) {
 	err = os.Setenv("GITHUB_WORKSPACE", "/root")
 	assert.NoError(t, err)
 
-	err = RenderTo(fixtureFS, outfs, DefaultArgs())
+	a, err := DefaultArgs()
+	if !assert.NoError(t, err) {
+		return
+	}
+	err = RenderTo(fixtureFS, outfs, a)
 	assert.NoError(t, err)
 
 	actual, err := fs.ReadFile(outfs, "dir1/vars/test")

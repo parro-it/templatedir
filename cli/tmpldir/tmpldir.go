@@ -9,13 +9,9 @@ import (
 	"github.com/parro-it/templatedir"
 )
 
-type errorChecker struct {
-	err error
-}
-
-func (checker errorChecker) dieOnErr() {
-	if checker.err != nil {
-		fmt.Fprintf(os.Stderr, "Fatal error: %s\n\n", checker.err.Error())
+func dieOnErr(err error) {
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Fatal error: %s\n\n", err.Error())
 		os.Exit(1)
 	}
 }
@@ -24,17 +20,22 @@ func main() {
 	fmt.Println("templatedir")
 
 	var targetDir string
-	var check errorChecker
+	var err error
 
 	if len(os.Args) > 1 {
 		targetDir = os.Args[1]
 	} else {
-		targetDir, check.err = os.Getwd()
-		check.dieOnErr()
+		targetDir, err = os.Getwd()
+		dieOnErr(err)
 	}
 
 	fmt.Println("->	applying to directory ", targetDir)
 	fsys := osfs.DirWriteFS(targetDir)
-	check.err = templatedir.RenderTo(fsys, fsys, templatedir.DefaultArgs())
-	check.dieOnErr()
+
+	var args templatedir.Args
+	args, err = templatedir.DefaultArgs()
+	dieOnErr(err)
+
+	err = templatedir.RenderTo(fsys, fsys, args)
+	dieOnErr(err)
 }
