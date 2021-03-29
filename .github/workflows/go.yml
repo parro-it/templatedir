@@ -18,7 +18,9 @@ jobs:
           
       - name: Test
         run: go test -failfast -race ./...
- 
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       - name: Lint
         run: |
           go get golang.org/x/lint/golint
@@ -31,6 +33,7 @@ jobs:
         uses: paambaati/codeclimate-action@v2.7.5
         env:
           CC_TEST_REPORTER_ID: ${{ secrets.CC_TEST_REPORTER_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           coverageCommand: go test -coverprofile=c.out ./...
           prefix: github.com/parro-it/templatedir
