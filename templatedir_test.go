@@ -29,6 +29,7 @@ func TestWalkDir(t *testing.T) {
 		"dir1/dir2/file3.txt.template",
 		"dir1/dir3/file4.template",
 		"dir1/vars/test.template",
+		"{{.Count}}.template",
 	}, actual)
 }
 
@@ -49,6 +50,29 @@ func TestRenderFile(t *testing.T) {
 	assert.NoError(t, err)
 
 	assert.Equal(t, "you pass 42.", string(actual))
+}
+
+func TestRenderFileName(t *testing.T) {
+	r := renderer{
+		srcfs:  fixtureFS,
+		destfs: syncfs.New(memfs.NewFS()).(writefs.WriteFS),
+		args:   args,
+	}
+	err := r.renderFile("{{.Count}}.template")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	actual, err := fs.ReadFile(r.destfs, "42")
+	if !assert.NoError(t, err) {
+		return
+	}
+
+	assert.Equal(t, "answer is 42", string(actual))
+
+	_, err = fs.Stat(r.destfs, "{{.Count}}.template")
+	assert.True(t, errors.Is(err, fs.ErrNotExist))
+
 }
 
 func TestRenderTo(t *testing.T) {

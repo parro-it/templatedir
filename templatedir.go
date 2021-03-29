@@ -5,15 +5,16 @@
 package templatedir
 
 import (
+	"bytes"
 	"errors"
 	"fmt"
-	"html/template"
 	"io/fs"
 	"os"
 	"path"
 	"runtime"
 	"strings"
 	"sync"
+	"text/template"
 
 	"github.com/parro-it/vs/syncfs"
 	"github.com/parro-it/vs/writefs"
@@ -123,7 +124,19 @@ func (r renderer) renderFile(src string) error {
 		return err
 	}
 
-	outname := src[:len(src)-len(".template")]
+	outname := strings.TrimSuffix(src, ".template")
+
+	t, err := template.New("filename").Parse(outname)
+	if err != nil {
+		return err
+	}
+	var buf bytes.Buffer
+	err = t.Execute(&buf, r.args)
+	if err != nil {
+		return err
+	}
+	outname = buf.String()
+
 	dest, err := writefs.OpenFile(r.destfs, outname, os.O_CREATE|os.O_WRONLY|os.O_TRUNC, fs.FileMode(0644))
 	if err != nil {
 		return err
