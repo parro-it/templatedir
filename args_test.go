@@ -6,7 +6,6 @@ import (
 	"runtime"
 	"testing"
 
-	"github.com/google/go-github/v34/github"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -56,7 +55,7 @@ func TestGetGHInfos(t *testing.T) {
 		return
 	}
 
-	assert.Equal(t, github.Repository{}, *repo)
-	assert.Equal(t, github.User{}, *user)
+	assert.Equal(t, "Templare aids you in making GH repos from GH template repos.", repo.GetDescription())
+	assert.Equal(t, "Andrea Parodi", user.GetName())
 
 }
