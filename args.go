@@ -70,6 +70,12 @@ func DefaultArgs() (Args, error) {
 	if err != nil {
 		return nil, err
 	}
+	if user == nil {
+		user = &github.User{}
+	}
+	if repo == nil {
+		repo = &github.Repository{}
+	}
 	args["User"] = user
 	args["Repo"] = repo
 
